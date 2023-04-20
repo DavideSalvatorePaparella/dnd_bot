@@ -1,7 +1,11 @@
+require('dotenv').config();
+
+
+
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 
-const token = '6196011826:AAEwuEjfcB3r8ZfGqB5NnUTGakwcmxaxHvk';
+const token = process.env.TOKEN;
 
 const apiUrl = 'https://www.dnd5eapi.co/api';
 const apiPrefix = 'https://www.dnd5eapi.co';
