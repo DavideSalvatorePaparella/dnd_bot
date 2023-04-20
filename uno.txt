@@ -1,0 +1,3 @@
+creami un codice nodejs per cui: un bot telegram al comando /races mi prenda le informazioni delle razze dall'api https://www.dnd5eapi.co/api/races e le rimandi tramite messaggio e per ogni razza dia dei comandi per tastiera tramite i quali il bot manda indietro le informazioni della razza selezionata nell'elenco della api https://www.dnd5eapi.co/api/races
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#writing_a_regular_expression_pattern
