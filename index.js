@@ -12,6 +12,8 @@ const apiPrefix = 'https://www.dnd5eapi.co';
 
 let races = [];
 
+let classes = [];
+
 const bot = new TelegramBot(token, {
     polling: true
 });
@@ -72,7 +74,7 @@ bot.onText(/\/acidarrow/, async (msg) =>{
 bot.onText(/\/races/, async (msg) => {
     try {
       const response = await axios.get('https://www.dnd5eapi.co/api/races');
-      races = response.data.results;
+      races = response.data.results.map((r) => r.name);
       const results = response.data.results.map((race) => {
         return {
           text: race.name,
@@ -97,11 +99,28 @@ bot.onText(/\/races/, async (msg) => {
   });
 
   bot.on('message', async (message) => {
-    const raceName = message.text;
-    const racesArray = races.map((i) => i.name);
-    console.log(racesArray);
-    if(racesArray.includes(raceName)){
-      const response = await axios.get(apiUrl + '/races/' + raceName.toLowerCase());
+    // const raceName = message.text;
+    // const racesArray = races.map((i) => i.name);
+    // //console.log(racesArray);
+    // if(racesArray.includes(raceName)){
+    //   const response = await axios.get(apiUrl + '/races/' + raceName.toLowerCase());
+    //   const race = response.data;
+    //   const msg = `
+    //     *${race.name}*
+    //     ${race.alignment}
+    //     ${race.age}
+    //     ${race.size_description}
+    //     ${race.starting_proficiencies.map((proficiency) => proficiency.name).join(', ')}
+    //   `;
+    //   const options = { parse_mode: 'Markdown' };
+    //   bot.sendMessage(message.chat.id, msg, options);
+    // }
+
+    console.log(message.text);
+
+    if(races.includes(message.text)){
+      console.log('is a race');
+      const response = await axios.get(apiUrl + '/races/' + message.text.toLowerCase());
       const race = response.data;
       const msg = `
         *${race.name}*
@@ -112,27 +131,94 @@ bot.onText(/\/races/, async (msg) => {
       `;
       const options = { parse_mode: 'Markdown' };
       bot.sendMessage(message.chat.id, msg, options);
+    }else if(classes.includes(message.text)){
+      console.log('is a class');
+      const response = await axios.get(apiUrl + '/classes/' + message.text.toLowerCase());
+      const classname = response.data;
+      const msg = `
+      *${classname.name}*
+      ${classname.hit_die}
+      ${classname.class_levels}
+      ${classname.size_description}}
+    `;
+    const options = { parse_mode: 'Markdown' };
+    bot.sendMessage(message.chat.id, msg, options);
     }
+
   });
   
+
+  function HandleRace(race){
+    const message = `
+    *${race.name}*
+    ${race.alignment}
+    ${race.age}
+    ${race.size_description}
+    ${race.starting_proficiencies.map((proficiency) => proficiency.name).join(', ')}
+  `;
+  const options = { parse_mode: 'Markdown' };
+  bot.sendMessage(query.message.chat.id, message, options);
+  }
+
+  function HandleClasses(classname){
+    const message = `
+    *${classname.name}*
+    ${classname.hit_die}
+    ${classname.class_levels}
+    ${classname.size_description}}
+  `;
+  const options = { parse_mode: 'Markdown' };
+  bot.sendMessage(query.message.chat.id, message, options);
+  }
+
+
+
   // Ricezione di un callback_query dagli utenti
   bot.on('callback_query', async (query) => {
     try {
       console.log(JSON.stringify(query))
       const url = query.data;
       const response = await axios.get(apiPrefix + url);
-      const race = response.data;
-      const message = `
-        *${race.name}*
-        ${race.alignment}
-        ${race.age}
-        ${race.size_description}
-        ${race.starting_proficiencies.map((proficiency) => proficiency.name).join(', ')}
-      `;
-      const options = { parse_mode: 'Markdown' };
-      bot.sendMessage(query.message.chat.id, message, options);
+
+      if(races.includes(query.data)){
+        HandleRace(response.data);
+      }else if(classes.include(query.data))
+      {
+        HandleClasses(response.data);
+      }
+      
+      
     } catch (error) {
       console.error(error);
       bot.sendMessage(query.message.chat.id, 'Errore durante la lettura delle informazioni sulla razza');
+    }
+  });
+
+
+  //classes
+  bot.onText(/\/classes/, async (msg) => {
+    try {
+      const response = await axios.get('https://www.dnd5eapi.co/api/classes');
+      classes = response.data.results.map((c) => c.name);
+      const results = response.data.results.map((class1) => {
+        return {
+          text: class1.name,
+          callback_data: class1.url
+        };
+      });
+      const options = {
+        parse_mode: 'Markdown',
+        reply_markup: {
+          keyboard: [...results.map((i) => [i])]
+        }
+      };
+      bot.sendMessage(
+        msg.chat.id,
+        'Seleziona una classe:',
+        options
+      );
+    } catch (error) {
+      console.error(error);
+      bot.sendMessage(msg.chat.id, 'Errore durante la lettura delle classi');
     }
   });
