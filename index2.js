@@ -40,11 +40,23 @@ bot.onText(/\/create/, async (msg) => {
     let nome, livello;
 
     let razza, speed;
-    let strength, dexterity, constitution, intelligence, wisdom, charisma;
-    let strengthmod, dexteritymod, constitutionmod, intelligencemod, wisdommod, charismamod;
+    let strength = 0;
+    let dexterity = 0;
+    let constitution = 0;
+    let intelligence = 0;
+    let wisdom = 0;
+    let charisma = 0;
+    
+    let strengthmod = 0;
+    let dexteritymod = 0;
+    let constitutionmod = 0;
+    let intelligencemod = 0;
+    let wisdommod = 0;
+    let charismamod = 0;
 
     let classe, proficiency_bonus, hit_dice;
-    let strengthsaving, dexteritysaving, constitutionsaving, intelligencesaving, wisdomsaving, charismasaving;
+    let strengthsaving = 0, dexteritysaving = 0, constitutionsaving = 0, intelligencesaving = 0, wisdomsaving = 0, charismasaving = 0;
+
 
 
     //nome
@@ -96,6 +108,7 @@ bot.onText(/\/create/, async (msg) => {
                     case "dragonborn":
                         strength += 2;
                         charisma += 1;
+                        console.log(strength);
                         break;
                     case "dwarf":
                         constitution += 2;//
@@ -255,6 +268,7 @@ bot.onText(/\/create/, async (msg) => {
                     intelligencemod,
                     wisdom,
                     wisdommod,
+                    charisma,
                     charismamod
                 },
                 saving_throws:{
