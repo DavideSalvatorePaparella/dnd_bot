@@ -101,53 +101,10 @@ bot.onText(/\/create/, async (msg) => {
                     });
                 });
 
-                const raceResponse = await axios.get(`https://www.dnd5eapi.co/api/races/${razza.toLowerCase().replace(/\s+/g, '-')}`);
+                var raceResponse = await axios.get(`https://www.dnd5eapi.co/api/races/${razza.toLowerCase().replace(/\s+/g, '-')}`);
                 speed = raceResponse.data.speed;
 
-                switch (raceResponse.data.name.toLowerCase()) {
-                    case "dragonborn":
-                        strength += 2;
-                        charisma += 1;
-                        console.log(strength);
-                        break;
-                    case "dwarf":
-                        constitution += 2;//
-                        break;
-                    case "elf":
-                        dexterity += 2;//
-                        break;
-                    case "gnome":
-                        intelligence += 2;//
-                        break;
-                    case "half-elf":
-                        charisma += 2;
-                        break;
-                    case "half-orc":
-                        strength += 2;
-                        break;
-                    case "halfling":
-                        dexterity += 2;
-                        break;
-                    case "human":
-                        strength += 1;
-                        dexterity += 1;
-                        constitution += 1;
-                        intelligence += 1;
-                        wisdom += 1;
-                        charisma += 1;
-                        break;
-                    case "tiefling":
-                        intelligence += 1;
-                        charisma += 2;
-                        break;
-                    default:
-                        strength += 0;
-                        dexterity += 0;
-                        constitution += 0;
-                        intelligence += 0;
-                        wisdom += 0;
-                        charisma += 0;
-                }
+                
 
 
                 //classi
@@ -179,64 +136,7 @@ bot.onText(/\/create/, async (msg) => {
                     });
                 });
 
-                const classResponse = await axios.get(`https://www.dnd5eapi.co/api/classes/${classe.toLowerCase().replace(/\s+/g, '-')}`);
-
-
-                switch (classResponse.data.name.toLowerCase()) {
-                    case "barbarian":
-                        proficiency_bonus = 2;
-                        hit_dice = "d12";
-                        break;
-                    case "bard":
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                        break;
-                    case "cleric":
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                        break;
-                    case "druid":
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                        break;
-                    case "rogue":
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                        break;
-                    case "warlock":
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                        break;
-                    case "monk":
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                        break;
-                    case "fighter":
-                        proficiency_bonus = 2;
-                        hit_dice = "d10";
-                        break;
-                    case "paladin":
-                        proficiency_bonus = 2;
-                        hit_dice = "d10";
-                        break;
-                    case "ranger":
-                        proficiency_bonus = 2;
-                        hit_dice = "d10";
-                        break;
-                    case "sorcerer":
-                        proficiency_bonus = 2;
-                        hit_dice = "d6";
-                        break;
-                    case "wizard":
-                        proficiency_bonus = 2;
-                        hit_dice = "d6";
-                        break;
-                    default:
-                        proficiency_bonus = 2;
-                        hit_dice = "d8";
-                }
-
-                console.log(proficiency_bonus);
+                var classResponse = await axios.get(`https://www.dnd5eapi.co/api/classes/${classe.toLowerCase().replace(/\s+/g, '-')}`);
 
 
 
@@ -247,62 +147,243 @@ bot.onText(/\/create/, async (msg) => {
             }
 
 
-            const character = {
-                nome,
-                livello,
-                razza,
-                classe,
-                proficiency_bonus,
-                combat: {
-                    speed,
-                    hit_dice
-                },
-                ability_scores: {
-                    strength,
-                    strengthmod,
-                    dexterity,
-                    dexteritymod,
-                    constitution,
-                    constitutionmod,
-                    intelligence,
-                    intelligencemod,
-                    wisdom,
-                    wisdommod,
-                    charisma,
-                    charismamod
-                },
-                saving_throws:{
-                    strengthsaving,
-                    dexteritysaving,
-                    constitutionsaving,
-                    intelligencesaving,
-                    wisdomsaving,
-                    charismasaving
-                }
-            };
 
-            // Check if the characters file exists and create it if it doesn't
-            if (!fs.existsSync('characters.json')) {
-                fs.writeFileSync('characters.json', '{"characters": []}');
+            
+            switch (classResponse.data.name.toLowerCase()) {
+                case "barbarian":
+                    proficiency_bonus = 2;
+                    hit_dice = "d12";
+                    break;
+                case "bard":
+                    proficiency_bonus = 2;
+                    hit_dice = "d8";
+                    break;
+                case "cleric":
+                    proficiency_bonus = 2;
+                     hit_dice = "d8";
+                    break;
+                case "druid":
+                    proficiency_bonus = 2;
+                    hit_dice = "d8";
+                    break;
+                case "rogue":
+                    proficiency_bonus = 2;
+                    hit_dice = "d8";
+                    break;
+                case "warlock":
+                    proficiency_bonus = 2;
+                    hit_dice = "d8";
+                    break;
+                case "monk":
+                    proficiency_bonus = 2;
+                    hit_dice = "d8";
+                    break;
+                case "fighter":
+                    proficiency_bonus = 2;
+                    hit_dice = "d10";
+                    break;
+                 case "paladin":
+                     proficiency_bonus = 2;
+                    hit_dice = "d10";
+                    break;
+                case "ranger":
+                    proficiency_bonus = 2;
+                    hit_dice = "d10";
+                    break;
+                case "sorcerer":
+                    proficiency_bonus = 2;
+                    hit_dice = "d6";
+                    break;
+                case "wizard":
+                    proficiency_bonus = 2;
+                    hit_dice = "d6";
+                    break;
+                default:
+                    proficiency_bonus = 2;
+                    hit_dice = "d8";
             }
 
-            // Read the characters file and parse its contents
-            const characters = JSON.parse(fs.readFileSync('characters.json', 'utf8')).characters;
+            console.log(proficiency_bonus);
 
-            // Add the new character to the list
-            characters.push(character);
 
-            // Write the updated characters list back to the file
-            fs.writeFileSync('characters.json', JSON.stringify({ characters }, null, 2));
+            switch (raceResponse.data.name.toLowerCase()) {
+                case "dragonborn":
+                    strength += 2;
+                    charisma += 1;
+                    console.log(strength);
+                    break;
+                case "dwarf":
+                    constitution += 2;//
+                    break;
+                case "elf":
+                    dexterity += 2;//
+                    break;
+                case "gnome":
+                    intelligence += 2;//
+                    break;
+                case "half-elf":
+                    charisma += 2;
+                        break;
+                case "half-orc":
+                    strength += 2;
+                    break;
+                case "halfling":
+                    dexterity += 2;
+                    break;
+                case "human":
+                    strength += 1;
+                    dexterity += 1;
+                    constitution += 1;
+                    intelligence += 1;
+                    wisdom += 1;
+                    charisma += 1;
+                    break;
+                case "tiefling":
+                    intelligence += 1;
+                    charisma += 2;
+                    break;
+                default:
+                    strength += 0;
+                    dexterity += 0;
+                    constitution += 0;
+                    intelligence += 0;
+                    wisdom += 0;
+                    charisma += 0;
+            }
 
-            bot.sendMessage(chatId, 'Il personaggio è stato creato con successo!');
+
+            bot.sendMessage(chatId, 'Roll the Dices!');
+            bot.sendMessage(chatId, 'Strength:');
+            bot.once('message', async (livelloMsg) => {
+                strength = parseInt(livelloMsg.text);
+                strengthmod += applyMod(strength);
+
+                bot.sendMessage(chatId, 'Dexterity:');
+                bot.once('message', async (livelloMsg) => {
+                    dexterity = parseInt(livelloMsg.text);
+                    dexteritymod += applyMod(dexterity);
+
+                    bot.sendMessage(chatId, 'Constitution:');
+                    bot.once('message', async (livelloMsg) => {
+                        constitution = parseInt(livelloMsg.text);
+                        constitutionmod += applyMod(constitution);
+
+                        bot.sendMessage(chatId, 'Intelligence:');
+                        bot.once('message', async (livelloMsg) => {
+                            intelligence = parseInt(livelloMsg.text);
+                            intelligencemod += applyMod(intelligence);
+    
+                            bot.sendMessage(chatId, 'Wisdom:');
+                            bot.once('message', async (livelloMsg) => {
+                                wisdom = parseInt(livelloMsg.text);
+                                wisdommod += applyMod(wisdom);
+        
+                                bot.sendMessage(chatId, 'Charisma:');
+                                bot.once('message', async (livelloMsg) => {
+                                    charisma = parseInt(livelloMsg.text);
+                                    charismamod += applyMod(charisma);
+                                    
+                                    const character = {
+                                        nome,
+                                        livello,
+                                        razza,
+                                        classe,
+                                        proficiency_bonus,
+                                        combat: {
+                                            speed,
+                                            hit_dice
+                                        },
+                                        ability_scores: {
+                                            strength,
+                                            strengthmod,
+                                            dexterity,
+                                            dexteritymod,
+                                            constitution,
+                                            constitutionmod,
+                                            intelligence,
+                                            intelligencemod,
+                                            wisdom,
+                                            wisdommod,
+                                            charisma,
+                                            charismamod
+                                        },
+                                        saving_throws:{
+                                            strengthsaving,
+                                            dexteritysaving,
+                                            constitutionsaving,
+                                            intelligencesaving,
+                                            wisdomsaving,
+                                            charismasaving
+                                        }
+                                    };
+                        
+                                    // Check if the characters file exists and create it if it doesn't
+                                    if (!fs.existsSync('characters.json')) {
+                                        fs.writeFileSync('characters.json', '{"characters": []}');
+                                    }
+                        
+                                    // Read the characters file and parse its contents
+                                    const characters = JSON.parse(fs.readFileSync('characters.json', 'utf8')).characters;
+                        
+                                    // Add the new character to the list
+                                    characters.push(character);
+                        
+                                    // Write the updated characters list back to the file
+                                    fs.writeFileSync('characters.json', JSON.stringify({ characters }, null, 2));
+                        
+                                    bot.sendMessage(chatId, 'Il personaggio è stato creato con successo!');
+
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
+            
         });
     });
 });
 
 
 
-
+function applyMod(value){
+    let mod = 0;
+    if (value === 1) {
+      mod = -5;
+    } else if (value >= 2 && value <= 3) {
+      mod = -4;
+    } else if (value >= 4 && value <= 5) {
+      mod = -3;
+    } else if (value >= 6 && value <= 7) {
+      mod = -2;
+    } else if (value >= 8 && value <= 9) {
+      mod = -1;
+    } else if (value >= 10 && value <= 11) {
+      mod = 0;
+    } else if (value >= 12 && value <= 13) {
+      mod = 1;
+    } else if (value >= 14 && value <= 15) {
+      mod = 2;
+    } else if (value >= 16 && value <= 17) {
+      mod = 3;
+    } else if (value >= 18 && value <= 19) {
+      mod = 4;
+    } else if (value >= 20 && value <= 21) {
+      mod = 5;
+    } else if (value >= 22 && value <= 23) {
+      mod = 6;
+    } else if (value >= 24 && value <= 25) {
+      mod = 7;
+    } else if (value >= 26 && value <= 27) {
+      mod = 8;
+    } else if (value >= 28 && value <= 29) {
+      mod = 9;
+    } else if (value === 30) {
+      mod = 10;
+    }
+    return mod;
+}
 
 
 bot.onText(/\/immagine/, (msg) => {
