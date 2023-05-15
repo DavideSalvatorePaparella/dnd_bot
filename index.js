@@ -282,6 +282,8 @@ bot.onText(/\/create/, async (msg) => {
                                 bot.once('message', async (livelloMsg) => {
                                     charisma = parseInt(livelloMsg.text);
                                     charismamod += applyMod(charisma);
+
+                                    
                                     
                                     const character = {
                                         nome,
