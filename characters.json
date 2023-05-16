@@ -1,3 +1,38 @@
 {
-  "characters": []
+  "characters": [
+    {
+      "nome": "Tarin the spearbreaker",
+      "livello": 1,
+      "razza": "Human",
+      "classe": "Barbarian",
+      "proficiency_bonus": 2,
+      "combat": {
+        "speed": 30,
+        "hit_dice": "d12",
+        "initiative": 2
+      },
+      "ability_scores": {
+        "strength": 16,
+        "strengthmod": 3,
+        "dexterity": 14,
+        "dexteritymod": 2,
+        "constitution": 15,
+        "constitutionmod": 2,
+        "intelligence": 9,
+        "intelligencemod": -1,
+        "wisdom": 13,
+        "wisdommod": 1,
+        "charisma": 11,
+        "charismamod": 0
+      },
+      "saving_throws": {
+        "strengthsaving": 5,
+        "dexteritysaving": 2,
+        "constitutionsaving": 4,
+        "intelligencesaving": -1,
+        "wisdomsaving": 1,
+        "charismasaving": 0
+      }
+    }
+  ]
 }

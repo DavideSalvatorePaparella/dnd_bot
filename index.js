@@ -11,6 +11,8 @@ const token = process.env.TOKEN;
 const apiUrl = 'https://www.dnd5eapi.co/api';
 const apiPrefix = 'https://www.dnd5eapi.co';
 
+const charactersData = JSON.parse(fs.readFileSync('characters.json', 'utf8'));
+
 let races = [];
 
 let classes = [];
@@ -39,7 +41,7 @@ bot.onText(/\/start/, (msg) => {
 bot.onText(/\/create/, async (msg) => {
     let nome, livello;
 
-    let razza, speed;
+    let razza, speed, hit_points, initiative;
     let strength = 0;
     let dexterity = 0;
     let constitution = 0;
@@ -283,8 +285,130 @@ bot.onText(/\/create/, async (msg) => {
                                     charisma = parseInt(livelloMsg.text);
                                     charismamod += applyMod(charisma);
 
-                                    
-                                    
+                                    //saving throws added after modifiers
+                                    switch (classResponse.data.name.toLowerCase()) {
+                                        case "barbarian":
+                                            hit_points = 8 + constitutionmod;
+                                            strengthsaving = strengthmod + proficiency_bonus;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod + proficiency_bonus;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod;
+                                            break;
+                                        case "bard":                         
+                                            hit_points = 8 + constitutionmod;                   
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod + proficiency_bonus;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod + proficiency_bonus;
+                                            break;
+                                        case "cleric":
+                                            hit_points = 8 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod + proficiency_bonus;
+                                            charismasaving = charismamod + proficiency_bonus;
+                                            break;
+                                        case "druid":
+                                            hit_points = 8 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod + proficiency_bonus;
+                                            wisdomsaving = wisdommod + proficiency_bonus;
+                                            charismasaving = charismamod;
+                                            break;
+                                        case "rogue":
+                                            hit_points = 8 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod + proficiency_bonus;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod + proficiency_bonus;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod;
+                                            break;
+                                        case "warlock":
+                                            hit_points = 8 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod + proficiency_bonus;
+                                            charismasaving = charismamod  + proficiency_bonus;
+                                            break;
+                                        case "monk":
+                                            hit_points = 8 + constitutionmod;
+                                            strengthsaving = strengthmod + proficiency_bonus;
+                                            dexteritysaving = dexteritymod + proficiency_bonus;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod;
+                                            break;
+                                        case "fighter":
+                                            hit_points = 10 + constitutionmod;
+                                            strengthsaving = strengthmod + proficiency_bonus;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod + proficiency_bonus;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod;
+                                            break;
+                                         case "paladin":
+                                            hit_points = 10 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod + proficiency_bonus;
+                                            charismasaving = charismamod  + proficiency_bonus;
+                                            break;
+                                        case "ranger":
+                                            hit_points = 10 + constitutionmod;
+                                            strengthsaving = strengthmod + proficiency_bonus;
+                                            dexteritysaving = dexteritymod + proficiency_bonus;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod;
+                                            break;
+                                        case "sorcerer":
+                                            hit_points = 6 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod+ proficiency_bonus;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod  + proficiency_bonus;
+                                            break;
+                                        case "wizard":
+                                            hit_points = 6 + constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod + proficiency_bonus;
+                                            wisdomsaving = wisdommod + proficiency_bonus;
+                                            charismasaving = charismamod;
+                                            break;
+                                        default:
+                                            hit_points = constitutionmod;
+                                            strengthsaving = strengthmod;
+                                            dexteritysaving = dexteritymod;
+                                            constitutionsaving = constitutionmod;
+                                            intelligencesaving = intelligencemod;
+                                            wisdomsaving = wisdommod;
+                                            charismasaving = charismamod;
+                                    }
+
+
+
+                                    initiative = dexteritymod;
+
                                     const character = {
                                         nome,
                                         livello,
@@ -293,7 +417,8 @@ bot.onText(/\/create/, async (msg) => {
                                         proficiency_bonus,
                                         combat: {
                                             speed,
-                                            hit_dice
+                                            hit_dice,
+                                            initiative
                                         },
                                         ability_scores: {
                                             strength,
@@ -386,6 +511,55 @@ function applyMod(value){
     }
     return mod;
 }
+
+
+
+//see your characers /characters
+bot.onText(/\/characters/, (msg) => {
+    const chatId = msg.chat.id;
+    const characterNames = charactersData.characters.map((character) => character.nome);
+    const inlineKeyboard = characterNames.map((name) => [{ text: name, callback_data: name }]);
+    const options = { reply_markup: JSON.stringify({ inline_keyboard: inlineKeyboard }) };
+    bot.sendMessage(chatId, 'Seleziona un personaggio:', options);
+  });
+
+// callback characters
+bot.on('callback_query', (callbackQuery) => {
+    const chatId = callbackQuery.message.chat.id;
+    const characterName = callbackQuery.data;
+    const selectedCharacter = charactersData.characters.find((character) => character.nome === characterName);
+  
+    if (selectedCharacter) {
+      const characterInfo = `
+        Nome: ${selectedCharacter.nome}
+        Livello: ${selectedCharacter.livello}
+        Razza: ${selectedCharacter.razza}
+        Classe: ${selectedCharacter.classe}
+        Bonus di competenza: ${selectedCharacter.proficiency_bonus}
+        Velocità di combattimento: ${selectedCharacter.combat.speed}
+        Dado vita: ${selectedCharacter.combat.hit_dice}
+        Iniziativa: ${selectedCharacter.combat.initiative}
+        Valori abilità:
+          Forza: ${selectedCharacter.ability_scores.strength} (mod: ${selectedCharacter.ability_scores.strengthmod})
+          Destrezza: ${selectedCharacter.ability_scores.dexterity} (mod: ${selectedCharacter.ability_scores.dexteritymod})
+          Costituzione: ${selectedCharacter.ability_scores.constitution} (mod: ${selectedCharacter.ability_scores.constitutionmod})
+          Intelligenza: ${selectedCharacter.ability_scores.intelligence} (mod: ${selectedCharacter.ability_scores.intelligencemod})
+          Saggezza: ${selectedCharacter.ability_scores.wisdom} (mod: ${selectedCharacter.ability_scores.wisdommod})
+          Carisma: ${selectedCharacter.ability_scores.charisma} (mod: ${selectedCharacter.ability_scores.charismamod})
+        Tiri salvezza:
+          Forza: ${selectedCharacter.saving_throws.strengthsaving}
+          Destrezza: ${selectedCharacter.saving_throws.dexteritysaving}
+          Costituzione: ${selectedCharacter.saving_throws.constitutionsaving}
+          Intelligenza: ${selectedCharacter.saving_throws.intelligencesaving}
+          Saggezza: ${selectedCharacter.saving_throws.wisdomsaving}
+          Carisma: ${selectedCharacter.saving_throws.charismasaving}
+      `;
+  
+      bot.sendMessage(chatId, characterInfo);
+    } else {
+      bot.sendMessage(chatId, 'Personaggio non trovato.');
+    }
+  });
 
 
 bot.onText(/\/immagine/, (msg) => {
@@ -525,24 +699,24 @@ function HandleClasses(classname) {
 
 
 // Ricezione di un callback_query dagli utenti
-bot.on('callback_query', async (query) => {
-    try {
-        console.log(JSON.stringify(query))
-        const url = query.data;
-        const response = await axios.get(apiPrefix + url);
+// bot.on('callback_query', async (query) => {
+//     try {
+//         console.log(JSON.stringify(query))
+//         const url = query.data;
+//         const response = await axios.get(apiPrefix + url);
 
-        if (races.includes(query.data)) {
-            HandleRace(response.data);
-        } else if (classes.include(query.data)) {
-            HandleClasses(response.data);
-        }
+//         if (races.includes(query.data)) {
+//             HandleRace(response.data);
+//         } else if (classes.include(query.data)) {
+//             HandleClasses(response.data);
+//         }
 
 
-    } catch (error) {
-        console.error(error);
-        bot.sendMessage(query.message.chat.id, 'Errore durante la lettura delle informazioni sulla razza');
-    }
-});
+//     } catch (error) {
+//         console.error(error);
+//         bot.sendMessage(query.message.chat.id, 'Errore durante la lettura delle informazioni sulla razza');
+//     }
+// });
 
 
 //classes
