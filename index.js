@@ -13,6 +13,11 @@ const apiPrefix = 'https://www.dnd5eapi.co';
 
 const charactersData = JSON.parse(fs.readFileSync('characters.json', 'utf8'));
 
+
+
+
+
+
 let races = [];
 
 let classes = [];
@@ -528,7 +533,9 @@ bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const characterName = callbackQuery.data;
     const selectedCharacter = charactersData.characters.find((character) => character.nome === characterName);
-  
+    
+
+
     if (selectedCharacter) {
       const characterInfo = `
         Nome: ${selectedCharacter.nome}
