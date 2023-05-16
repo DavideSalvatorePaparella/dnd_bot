@@ -5,6 +5,7 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 
 const token = process.env.TOKEN;
 
@@ -14,6 +15,20 @@ const apiPrefix = 'https://www.dnd5eapi.co';
 const charactersData = JSON.parse(fs.readFileSync('characters.json', 'utf8'));
 
 
+
+//try to webserver
+const express = require('express');
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const port = 3000;
+app.listen(port, () => {
+  console.log('server is running at http://localhost:${port}');
+})
+
+const characters = require('./characters.json').characters;
+const characterNameses = characters.map(c => c.nome);
 
 
 
@@ -753,3 +768,79 @@ bot.onText(/\/classes/, async (msg) => {
         bot.sendMessage(msg.chat.id, 'Errore durante la lettura delle classi');
     }
 });
+
+
+
+
+
+    //risposte webserver
+    app.get('/', (req, res) => {
+    res.send(`
+      <html>
+        <head>
+          <title>Seleziona personaggio</title>
+        </head>
+        <body>
+          <h1>Seleziona personaggio</h1>
+          <form action="/select-character" method="POST">
+            <label for="character">Personaggio:</label>
+            <select id="character" name="character">
+              ${characterNameses.map(name => `<option value="${name}">${name}</option>`).join('')}
+            </select>
+            <button type="submit">Seleziona</button>
+          </form>
+        </body>
+      </html>
+    `);
+  });
+  
+  app.post('/select-character', (req, res) => {
+    const characterName = req.body.character;
+    const character = characters.find(c => c.nome === characterName);
+    if (character) {
+      const html = `
+        <html>
+          <head>
+            <title>Informazioni del personaggio</title>
+          </head>
+          <body>
+            <h1>Informazioni del personaggio</h1>
+            <ul>
+              <li>Nome: ${character.nome}</li>
+              <li>Livello: ${character.livello}</li>
+              <li>Razza: ${character.razza}</li>
+              <li>Classe: ${character.classe}</li>
+              <li>Bonus di competenza: ${character.proficiency_bonus}</li>
+              <li>Velocità di combattimento: ${character.combat.speed}</li>
+              <li>Dado per i colpi: ${character.combat.hit_dice}</li>
+              <li>Iniziativa: ${character.combat.initiative}</li>
+              <li>Forza: ${character.ability_scores.strength}</li>
+              <li>Modificatore di Forza: ${character.ability_scores.strengthmod}</li>
+              <li>Destrezza: ${character.ability_scores.dexterity}</li>
+              <li>Modificatore di Destrezza: ${character.ability_scores.dexteritymod}</li>
+              <li>Costituzione: ${character.ability_scores.constitution}</li>
+              <li>Modificatore di Costituzione: ${character.ability_scores.constitutionmod}</li>
+              <li>Intelligenza: ${character.ability_scores.intelligence}</li>
+              <li>Modificatore di Intelligenza: ${character.ability_scores.intelligencemod}</li>
+              <li>Saggezza: ${character.ability_scores.wisdom}</li>
+              <li>Modificatore di Saggezza: ${character.ability_scores.wisdommod}</li>
+              <li>Carisma: ${character.ability_scores.charisma}</li>
+              <li>Modificatore di Carisma: ${character.ability_scores.charismamod}</li>
+              <li>Tiri salvezza:</li>
+              <ul>
+                <li>Forza: ${character.saving_throws.strengthsaving}</li>
+                <li>Destrezza: ${character.saving_throws.dexteritysaving}</li>
+                <li>Costituzione: ${character.saving_throws.constitutionsaving}</li>
+                <li>Intelligenza: ${character.saving_throws.intelligencesaving}</li>
+                <li>Saggezza: ${character.saving_throws.wisdomsaving}</li>
+                <li>Carisma: ${character.saving_throws.charismasaving}</li>
+              </ul>
+            </ul>
+          </body>
+        </html>
+      `;
+      res.send(html);
+    } else {
+      res.send('Personaggio non trovato!');
+    }
+  });
