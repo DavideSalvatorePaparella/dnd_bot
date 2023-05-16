@@ -148,7 +148,7 @@ bot.onText(/\/create/, async (msg) => {
 
 
 
-            
+            //gestione hit dice e proficiency
             switch (classResponse.data.name.toLowerCase()) {
                 case "barbarian":
                     proficiency_bonus = 2;
@@ -205,7 +205,7 @@ bot.onText(/\/create/, async (msg) => {
 
             console.log(proficiency_bonus);
 
-
+            //razze abilty scores 
             switch (raceResponse.data.name.toLowerCase()) {
                 case "dragonborn":
                     strength += 2;
@@ -251,7 +251,7 @@ bot.onText(/\/create/, async (msg) => {
                     charisma += 0;
             }
 
-
+            //razze Modifiers
             bot.sendMessage(chatId, 'Roll the Dices!');
             bot.sendMessage(chatId, 'Strength:');
             bot.once('message', async (livelloMsg) => {
